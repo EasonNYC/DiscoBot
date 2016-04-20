@@ -21,41 +21,6 @@ typedef enum {ButtonIsPressed,ButtonIsReleased} _buttonstate;
 volatile _buttonstate buttstate = ButtonIsReleased;
 volatile uint32_t b_i;   //counts up when button is pressed (1 tick = 1ms)
 
-//morse code stuff
-typedef enum {ShortPress,LongPress,Wait,Fill} _pressType;
-volatile _pressType presstype = Wait;
-volatile uint32_t press_tick = 0;
-volatile uint32_t release_tick = 0;
-
-//morse letter symbol codes
-uint8_t letters[26][4] = {
-		{1,2,0,0},//A
-		{2,1,1,1},
-		{2,1,2,1},
-		{2,1,1,0},//D
-		{1,0,0,0},
-		{1,1,2,1},
-		{2,2,1,0},
-		{1,1,1,1},
-		{1,1,0,0},
-		{1,2,2,2},
-		{2,1,2,0},//K
-		{1,2,1,1},
-		{2,2,0,0},
-		{2,1,0,0},
-		{2,2,2,0},
-		{1,2,2,1},
-		{2,2,1,2},//Q
-		{1,2,1,0},
-		{1,1,1,0},
-		{2,0,0,0},
-		{1,1,2,0},
-		{1,1,1,2}, //v
-		{1,2,2,0},
-		{2,1,1,2},
-		{2,1,2,2},
-		{2,2,1,1}};//z
-
 
 //reads the button on the discovery board
 uint32_t read_buttonc( uint32_t i )
