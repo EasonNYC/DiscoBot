@@ -10,25 +10,34 @@ A Real Time Embedded disco robot. Stayin' Alive.
 
 **WIRING CONNECTIONS:**  
 
+For PC controlled xbee:
 
-| STM32F4 PIN  | Peripheral  PIN  |
+| FTDI PIN  | XBEE PIN  |
 | ------------ |:----------------:|
 | GND          | GND              |
-| 5V           | VIN              |
-| PB7          | SDA              |
-| PB6          | SCL              |
+| 5V           | 5V              |
+| RX          | TX              |
+| TX          | RX              |
 | PD0          | EOC              |
+
+For robot Xbee:
+
+| STM32F4 PIN  | XBEE  PIN  |
+| ------------ |:----------------:|
+| GND          | GND              |
+| 3V           | 3V              |
+| PB7          | TX              |
+| PB6          | RX              |
 
 
 ###Software
 -The ARM Standard Peripheral Library must be included to properly use this driver. Specifically make sure you have included these S.P.L. files in your project's working directory:  
   (update this list)
   "stm32f4xx.h"  
-  "stm32f4xx_i2c.h"  
   "stm32f4xx_rcc.h"  
   "stm32f4xx_gpio.h"  
-  "stm32f4xx_syscfg.h"  
-  "stm32f4xx_exti.h"  
+  "stm32f4xx_usart.h"  
+  "misc.h"  
 
 ##Documentation:
 All files have been commented and are Doxygen compatible. A doxyfile has been included for easily generating documentation. Input and output paths may need to be edited to the path of your download directory.    
