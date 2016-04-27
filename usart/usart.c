@@ -14,6 +14,8 @@
 #include <stdio.h>
 
 
+
+
 #define MAX_STRLEN 50
 volatile char rx_buff[MAX_STRLEN+1]; //plus room for null terminator
 
@@ -64,13 +66,14 @@ void init_usart1(uint32_t baud)
 	USART_Init(USART1, &USART_InitStruct);
 
 
+	//(Nested Vector Interrupt controller)
 	//config receive interrupt so that we can get messages as soon as they come in
 	USART_ITConfig(USART1, USART_IT_RXNE, ENABLE); //enable usart1 receive interrupt
 	NVIC_InitStruct.NVIC_IRQChannel = USART1_IRQn; //attach usart1's irq
 	NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 0; //interrupt priority group (high)
 	NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0; //sub priority within group (high)
 	NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
-	NVIC_Init(&NVIC_InitStruct);//(Nested Vector Interrupt controller)
+	NVIC_Init(&NVIC_InitStruct);
 
 
 	//Lastly, enable usart1

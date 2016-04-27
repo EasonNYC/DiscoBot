@@ -16,6 +16,8 @@ SRCS += $(TASK_SRCS)
 USART_SRCS = usart/usart.c
 SRCS += $(USART_SRCS)
 
+CIRCARR_SRCS = circarray/circarray.c
+SRCS += $(CIRCARR_SRCS)
 # Binary will be generated with this name (with .elf filename extension)
 PROJ_NAME=STM32_example
 
