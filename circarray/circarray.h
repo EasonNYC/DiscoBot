@@ -15,7 +15,7 @@
 
 /**
  * @struct _CircArr_InitTypeDef
- * @brief a struct used to hold a circular array
+ * @brief a struct representing a circular array object
  */
 typedef struct _CircArr_InitTypeDef {
 	volatile uint8_t buf[CIRCSIZE]; //buffer
@@ -37,6 +37,8 @@ uint8_t buf_putbyte(CircArr_InitTypeDef* arr, uint8_t c);
 #endif /* CIRCARRAY_CIRCARRAY_H_ */
 
 /************example usage
+#include "circarray/circarray.h"
+
 
 CircArr_InitTypeDef msg; //first create 1 circular array buffer called msg
 

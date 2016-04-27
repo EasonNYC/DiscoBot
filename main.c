@@ -10,9 +10,7 @@
 #include "RNG/random_number_generator.h"
 #include "Task/timed_task.h"
 #include "usart/usart.h"
-#include "circarray/circarray.h"
 
-#define NUMLETTERS 26
 
 static void init_systick();
 //static void delay_ms(uint32_t n);
@@ -179,9 +177,6 @@ void calc_pitch_roll(float acc_x, float acc_y, float acc_z, float *pitch, float 
 
 void initialise_monitor_handles();
 
-CircArr_InitTypeDef msg;
-
-
 int main(void)
 {
   // initialize
@@ -198,14 +193,12 @@ int main(void)
   init_usart1(9600);
   usart_send( "UART1 Initialized. @9600bps\r\n");
 
-
-
-
   uint32_t t_prev = 0;
   while (1)
 	{
 	  //robot stuff
-	 //checkbutton();
+
+	 //timed task stuff
 
 
   }

@@ -12,7 +12,7 @@
 #include "stm32f4xx_usart.h"
 #include "misc.h" //for nvic stuff
 #include <stdio.h>
-
+//#include "circarray/circarray.h"
 
 
 
@@ -36,6 +36,7 @@ void init_usart1(uint32_t baud)
 	GPIO_InitTypeDef GPIO_InitStruct;
 	USART_InitTypeDef USART_InitStruct;
 	NVIC_InitTypeDef NVIC_InitStruct;
+	//CircArr_InitTypeDef msg;
 
 	// Enable clock for GPIOA
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
@@ -75,6 +76,9 @@ void init_usart1(uint32_t baud)
 	NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStruct);
 
+	//initialize a circular array for serial data handling
+	//initCircArray(&msg);
+
 
 	//Lastly, enable usart1
 	USART_Cmd(USART1, ENABLE);
@@ -95,16 +99,18 @@ if (USART_GetITStatus(USART1, USART_IT_RXNE))
 			//make sure its not the return char and make sure our incoming string is not too big
 			if((c != '\n') && (charcount < MAX_STRLEN))
 			{
+				//buf_putbyte(&msg,c); //rxbuff and charcount and the ifelse may not be necessary anymore. buffer needs more protection (volatile)
+
 				rx_buff[charcount] = c; //add char to received message array
-			   charcount++;
+				charcount++;
 			}
 			else
 			{
 			 rx_buff[charcount] = '\n';
 			 charcount = 0;
-			 //usart_send(USART1, rx_buff);  //transmit/echo back the received string via usart
+			 //usart_send(USART1, rx_buff);  //transmit/echo back the received string over usart
 			 printf("rec: ");
-			 printf("%s", rx_buff); //print for testing
+			 printf("%s", rx_buff); //print string for testing
 
 			 //now rx_buff contains a full string message
 			 //and we can copy it/send it anywhere in our robots code
