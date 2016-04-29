@@ -12,17 +12,23 @@
 
 #define CIRCSIZE 200
 
+typedef enum _bool {FALSE = 0, false = 0, TRUE = 1, true = 1} bool;
 
 /**
  * @struct _CircArr_InitTypeDef
  * @brief a struct representing a circular array object
  */
-typedef struct _CircArr_InitTypeDef {
-	volatile uint8_t buf[CIRCSIZE]; //buffer
-	volatile uint32_t n_r;     //read position
-	volatile uint32_t n_w;    //write position
-	uint32_t size;
-}CircArr_InitTypeDef;
+typedef struct _CircArr_InitTypeDef
+{
+	bool enabled;   //bool of whether this circarray struct is enabled and currently usable
+
+	uint32_t size;		// the array size in bytes to be created for the circular array (add resize capability?)
+	uint32_t n_r;     //read index upcounter (if n_r % size, will give current read position)
+	uint32_t n_w;    //write index upcounter (if n_w % size, will give current write position)
+
+	uint8_t* buf;    //a ptr to a circular array (malloc not great for embedded but maybe worth it for portability)
+
+} volatile CircArr_InitTypeDef;
 
 
 
