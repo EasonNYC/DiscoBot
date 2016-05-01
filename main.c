@@ -178,7 +178,10 @@ void calc_pitch_roll(float acc_x, float acc_y, float acc_z, float *pitch, float 
 
 void initialise_monitor_handles();
 
-void init_GPIO_A1A2_output()
+
+// intialise GpioA 1-4 as output for the connection to the LM293d for
+// motor direction of Left and Right motors
+void init_GPIO_A1A2A3A4_output()
 {
 	GPIO_InitTypeDef GPIO_InitStruct;
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA,  ENABLE); // enable clock for GPIOA
@@ -202,6 +205,10 @@ int main(void)
   init_accelerometers(); // initialize accelerometers
   init_rng(); // initialize random number generator
   init_temperature_sensor();
+
+  //gpio for lm293 init
+  init_GPIO_A1A2A3A4_output();
+
 
   //usart init
   init_usart1(9600);
