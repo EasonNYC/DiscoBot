@@ -2,9 +2,10 @@
 #define CAR_H
 
 
-void init_car_GPIOB();
-void set_left_motor_direc(uint32_t direc, float speed);
-
+/*
+this enum will be used by set_left_motor_direc and
+set_right_motor_direc
+*/
 typedef enum
 {
   FORWARD,
@@ -13,5 +14,12 @@ typedef enum
 
 } Directions;
 
+
+
+void init_GPIO_A1A2A3A4_output();
+void set_left_motor_direc(Directions direc, float speed);
+void set_right_motor_direc(Directions direc, float speed);
+void move_forward();
+void move_backward();
 
 #endif

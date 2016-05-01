@@ -10,7 +10,7 @@
 #include "RNG/random_number_generator.h"
 #include "Task/timed_task.h"
 #include "usart/usart.h"
-#include "car.h"
+#include "car/car.h"
 
 #define NUMLETTERS 26
 
@@ -205,8 +205,20 @@ int main(void)
   uint32_t t_prev = 0;
   while (1)
 	{
-	  //robot stuff
-	 //checkbutton();
+	//   //robot stuff
+	//  //checkbutton();
+  //  // set_left_motor_direc(FORWARD,0);
+  //  // set_right_motor_direc(BACKWARD,0);
+  //  move_forward();
+  //  delay_ms(3000);
+  //  // set_right_motor_direc(FORWARD,0);
+  //  // set_left_motor_direc(BACKWARD,0);
+  //  move_backward();
+  //  delay_ms(3000);
+  //  set_right_motor_direc(STOP,0);
+  //  set_left_motor_direc(STOP,0);
+  //  delay_ms(3000);
+
 
 
   }

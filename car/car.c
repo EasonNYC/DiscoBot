@@ -3,6 +3,7 @@
 #include "stm32f4xx_gpio.h"
 
 #include <stdio.h>
+#include "car/car.h"
 
 /*
 intialise GpioA 1-4 as output for the connection to the LM293d for
@@ -78,6 +79,29 @@ void set_right_motor_direc(Directions direc, float speed)
 
 }
 
+/*
+*********************************************
+Below are 9 functions that control the direction of the robot
+Here is  a diagram of 6 of the directions
+   |
+ \   /
+ /   \
+   |
+   this includes:
+move_forward() and move_backward() are as they sound
+move_forward_soft_left()
+move_forward_soft_right()
+move_backward_soft_left()
+move_backward_soft_right()
+
+then there are 3 more functions:
+stop() is self explanatory
+then there is spin in place to the left ("hard left")
+and spin to the right (hard right)
+*********************************************
+*/
+
+
 
 /*
 function to make robot go forward indefinitely
@@ -98,5 +122,43 @@ void move_backward()
 {
   set_left_motor_direc(BACKWARD,0);
   set_right_motor_direc(BACKWARD,0);
+
+}
+
+void move_forward_soft_left()
+{
+}
+
+
+void move_forward_soft_right()
+{
+
+}
+
+
+void move_backward_soft_left()
+{
+
+}
+
+void move_backward_soft_right()
+{
+
+}
+
+
+void move_spin_right()
+{
+
+}
+
+void move_spin_left()
+{
+
+}
+
+
+void stop()
+{
 
 }
