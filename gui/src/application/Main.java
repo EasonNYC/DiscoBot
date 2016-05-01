@@ -12,6 +12,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 
+/**
+ * This class is responsible for initializing the entire JavaFx
+ * {@link Application}.
+ * 
+ * @author Doris Tang
+ *
+ */
+
 public class Main extends Application {
 
 	private Scene primaryScene;
@@ -32,7 +40,7 @@ public class Main extends Application {
 	private void initRootLayout() {
 		// Load root layout from FXML file.
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(getClass().getResource("RootLayout.fxml"));
+		loader.setLocation(getClass().getResource("view/RootLayout.fxml"));
 
 		rootLayoutController = new RootLayoutController();
 		loader.setController(rootLayoutController);

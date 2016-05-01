@@ -10,6 +10,7 @@
 #include "RNG/random_number_generator.h"
 #include "Task/timed_task.h"
 #include "usart/usart.h"
+#include "car/car.h"
 
 //#include "circarray/circarray.h"
 
@@ -178,8 +179,6 @@ void calc_pitch_roll(float acc_x, float acc_y, float acc_z, float *pitch, float 
 
 void initialise_monitor_handles();
 
-
-
 int main(void)
 {
   // initialize
@@ -192,6 +191,10 @@ int main(void)
   init_rng(); // initialize random number generator
   init_temperature_sensor();
 
+  //gpio for lm293 init
+  init_GPIO_A1A2A3A4_output();
+
+
   //usart init
   init_usart1(9600);
   usart1_send( "UART1 Initialized. @9600bps\r\n");
@@ -200,13 +203,26 @@ int main(void)
   uint32_t t_prev = 0;
   while (1)
 	{
+
 	  //check serial buffer for incoming bytes
 	  if(usart1_available() >0){
 		 //char mybyte =  (char)usart1_read(); //get/store byte
 		  printf("%c",usart1_readc()); //print byte as char
 	  }
 
-	  //robot stuff
+	//   //robot stuff
+	//  //checkbutton();
+   set_left_motor_direc(FORWARD,0);
+   set_right_motor_direc(BACKWARD,0);
+   move_forward();
+  //  delay_ms(3000);
+  //  // set_right_motor_direc(FORWARD,0);
+  //  // set_left_motor_direc(BACKWARD,0);
+   move_backward();
+  //  delay_ms(3000);
+  //  set_right_motor_direc(STOP,0);
+  //  set_left_motor_direc(STOP,0);
+  //  delay_ms(3000);
 
 	 //timed task stuff
      if ((msTicks - t_prev) > 1000)
@@ -217,7 +233,3 @@ int main(void)
 
   }
 }
-
-
-
-
