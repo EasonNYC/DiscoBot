@@ -33,12 +33,13 @@ typedef struct _CircArr_InitTypeDef
 
 
 //public methods
-void initCircArray(CircArr_InitTypeDef* arr);
+void initCircArray(CircArr_InitTypeDef* arr, uint32_t size);
 uint8_t buf_empty(CircArr_InitTypeDef* arr);
 uint8_t buf_full(CircArr_InitTypeDef* arr);
 uint8_t buf_available(CircArr_InitTypeDef* arr);
 uint8_t buf_getbyte(CircArr_InitTypeDef* arr);
 uint8_t buf_putbyte(CircArr_InitTypeDef* arr, uint8_t c);
+void buf_test(CircArr_InitTypeDef* arr);
 
 #endif /* CIRCARRAY_CIRCARRAY_H_ */
 

@@ -11,6 +11,7 @@
 #include "Task/timed_task.h"
 #include "usart/usart.h"
 
+//#include "circarray/circarray.h"
 
 static void init_systick();
 //static void delay_ms(uint32_t n);
@@ -177,6 +178,8 @@ void calc_pitch_roll(float acc_x, float acc_y, float acc_z, float *pitch, float 
 
 void initialise_monitor_handles();
 
+
+
 int main(void)
 {
   // initialize
@@ -191,15 +194,26 @@ int main(void)
 
   //usart init
   init_usart1(9600);
-  usart_send( "UART1 Initialized. @9600bps\r\n");
+  usart1_send( "UART1 Initialized. @9600bps\r\n");
+
 
   uint32_t t_prev = 0;
   while (1)
 	{
+	  //check serial buffer for incoming bytes
+	  if(usart1_available() >0){
+		 //char mybyte =  (char)usart1_read(); //get/store byte
+		  printf("%c",usart1_readc()); //print byte as char
+	  }
+
 	  //robot stuff
 
 	 //timed task stuff
-
+     if ((msTicks - t_prev) > 1000)
+		{
+    	 	//printf("usartavail: %d\n", usart1_available());
+			t_prev = msTicks;
+		}
 
   }
 }

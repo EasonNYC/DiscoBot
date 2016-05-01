@@ -12,15 +12,17 @@
 #include "stm32f4xx_usart.h"
 #include "misc.h" //for nvic stuff
 #include <stdio.h>
-//#include "circarray/circarray.h"
+#include "circarray/circarray.h"
 
 
 
 #define MAX_STRLEN 50
-volatile char rx_buff[MAX_STRLEN+1]; //plus room for null terminator
+CircArr_InitTypeDef msg; //first create 1 circular array buffer called msg
+//make above static?
 
+//buf_test(&msg);
 
-/**
+/**@fn void init_usart1(uint32_t baud)
  * @brief Configures and initializes USART and its GPIO and interrupt controller
  * @param baud takes baud rate
  * @retval none
@@ -36,7 +38,7 @@ void init_usart1(uint32_t baud)
 	GPIO_InitTypeDef GPIO_InitStruct;
 	USART_InitTypeDef USART_InitStruct;
 	NVIC_InitTypeDef NVIC_InitStruct;
-	//CircArr_InitTypeDef msg;
+
 
 	// Enable clock for GPIOA
 	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
@@ -76,8 +78,8 @@ void init_usart1(uint32_t baud)
 	NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStruct);
 
-	//initialize a circular array for serial data handling
-	//initCircArray(&msg);
+	//initializes a circular array for storing incoming serial data
+	initCircArray(&msg,200);
 
 
 	//Lastly, enable usart1
@@ -86,37 +88,24 @@ void init_usart1(uint32_t baud)
 
 }
 
-//receives incoming chars and collects them into an array and prints them to debug terminal afterwards. overwrites startup irqhandler
+//
+/**@fn void USART1_IRQHandler()
+ * @brief Overload of usart interrupt handler. receives incoming chars and
+ * collects them into a circular array buffer and prints them to debug terminal
+ * afterwards. overloads startup irqhandler
+ * @param ascii char
+ * @retval none
+ */
 void USART1_IRQHandler()
 {
 
 if (USART_GetITStatus(USART1, USART_IT_RXNE))
 		{
-	      //get newest char
+	      //get newest incoming char/byte from data register and put in buffer
 			char c = USART1->DR;
-			static uint8_t charcount = 0;
 
-			//make sure its not the return char and make sure our incoming string is not too big
-			if((c != '\n') && (charcount < MAX_STRLEN))
-			{
-				//buf_putbyte(&msg,c); //rxbuff and charcount and the ifelse may not be necessary anymore. buffer needs more protection (volatile)
+			buf_putbyte(&msg,c);
 
-				rx_buff[charcount] = c; //add char to received message array
-				charcount++;
-			}
-			else
-			{
-			 rx_buff[charcount] = '\n';
-			 charcount = 0;
-			 //usart_send(USART1, rx_buff);  //transmit/echo back the received string over usart
-			 printf("rec: ");
-			 printf("%s", rx_buff); //print string for testing
-
-			 //now rx_buff contains a full string message
-			 //and we can copy it/send it anywhere in our robots code
-
-			 //todo: on receive set flag?
-			}
 		}
 
 }
@@ -125,7 +114,7 @@ if (USART_GetITStatus(USART1, USART_IT_RXNE))
  * @param ascii char
  * @retval none
  */
-void usart_send( volatile char *s)
+void usart1_send( volatile char *s)
 {
 
 	while(*s) {
@@ -134,14 +123,32 @@ void usart_send( volatile char *s)
 					*s++;
 	}
 }
-
-
-
-/*
- *send 1 char
-int putcharx(int ch){
-	while (USART_GetFLagStatus(USART1, USART_FLAG_TXE) == RESET);
-	USART_SendData(USART2, (uint8_t)ch);
+/**
+ * @brief Function returns next unread byte from serial buffer
+ * @param none
+ * @retval uint8_t
+ */
+uint8_t usart1_read(void){
+	return buf_getbyte(&msg);
 }
-*/
+
+/**
+ * @brief Function returns next unread byte as a char from serial buffer
+ * @param none
+ * @retval uint8_t
+ */
+char usart1_readc(void){
+	return (char)buf_getbyte(&msg);
+}
+
+/**
+ * @brief Function returns number of bytes waiting to be read in serial buffer
+ * @param none
+ * @retval uint8_t
+ */
+uint8_t usart1_available(void) {
+	return buf_available(&msg);
+}
+
+
 
