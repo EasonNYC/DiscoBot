@@ -1,14 +1,15 @@
-package loaders;
+package application.loaders;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class ImageLoader {
 
-	private static Image up, down, left, right;
+	private static ImageView up, down, left, right;
 
 	public static void loadImages() {
 		try {
@@ -32,22 +33,22 @@ public class ImageLoader {
 	public static void processImage(URL url) throws IOException {
 		if (url != null) {
 			InputStream input = url.openStream();
-			Image image = new Image(input);
+			ImageView image = new ImageView(new Image(input));
 			
 			String urlStr = url.getFile();
-			urlStr = urlStr.substring(urlStr.indexOf("wormguides"));
+			urlStr = urlStr.substring(urlStr.indexOf("application/view/"));
 			switch (urlStr) {
 			case PATH_FROM_ROOT + UP:
-				setUp(image);
+				up = image;
 				return;
 			case PATH_FROM_ROOT + DOWN:
-				setDown(image);
+				down = image;
 				return;
 			case PATH_FROM_ROOT + LEFT:
-				setLeft(image);
+				left = image;
 				return;
 			case PATH_FROM_ROOT + RIGHT:
-				setRight(image);
+				right = image;
 				return;
 			default:
 				return;
@@ -55,39 +56,23 @@ public class ImageLoader {
 		}
 	}
 
-	public static Image getUp() {
+	public static ImageView getUp() {
 		return up;
 	}
 
-	public static void setUp(Image up) {
-		ImageLoader.up = up;
-	}
-
-	public static Image getDown() {
+	public static ImageView getDown() {
 		return down;
 	}
 
-	public static void setDown(Image down) {
-		ImageLoader.down = down;
-	}
-
-	public static Image getLeft() {
+	public static ImageView getLeft() {
 		return left;
 	}
 
-	public static void setLeft(Image left) {
-		ImageLoader.left = left;
-	}
-
-	public static Image getRight() {
+	public static ImageView getRight() {
 		return right;
 	}
 
-	public static void setRight(Image right) {
-		ImageLoader.right = right;
-	}
-
 	private static final String ENTRY_PREFIX = "/application/view/";
-	private static final String PATH_FROM_ROOT = "appication/view/";
+	private static final String PATH_FROM_ROOT = "application/view/";
 	private static final String UP = "up.png", DOWN = "down.png", LEFT = "left.png", RIGHT = "right.png";
 }

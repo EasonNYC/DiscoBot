@@ -12,6 +12,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 
+/**
+ * This class is responsible for initializing the entire JavaFx
+ * {@link Application}.
+ * 
+ * @author Doris Tang
+ *
+ */
+
 public class Main extends Application {
 
 	private Scene primaryScene;
