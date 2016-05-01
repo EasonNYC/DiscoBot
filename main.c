@@ -10,6 +10,7 @@
 #include "RNG/random_number_generator.h"
 #include "Task/timed_task.h"
 #include "usart/usart.h"
+#include "car.h"
 
 #define NUMLETTERS 26
 
@@ -179,19 +180,6 @@ void calc_pitch_roll(float acc_x, float acc_y, float acc_z, float *pitch, float 
 void initialise_monitor_handles();
 
 
-// intialise GpioA 1-4 as output for the connection to the LM293d for
-// motor direction of Left and Right motors
-void init_GPIO_A1A2A3A4_output()
-{
-	GPIO_InitTypeDef GPIO_InitStruct;
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA,  ENABLE); // enable clock for GPIOA
-	GPIO_InitStruct.GPIO_OType 		= GPIO_OType_PP; // configure as push-pull
-	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT; // configure as outputs
-	GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_UP; // pull-up (logic 1 when floating)
-	GPIO_InitStruct.GPIO_Pin 			= GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4 ; // choose pins 1 and 2 (i.e., A1 and A2)
-	GPIO_InitStruct.GPIO_Speed 		= GPIO_Speed_25MHz; // set max update speed to 25 MHz
-	GPIO_Init( GPIOA, &GPIO_InitStruct); // initialize
-}
 
 
 int main(void)
