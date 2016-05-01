@@ -10,6 +10,7 @@
 #include "RNG/random_number_generator.h"
 #include "Task/timed_task.h"
 #include "usart/usart.h"
+#include "car/car.h"
 
 #define NUMLETTERS 26
 
@@ -178,17 +179,7 @@ void calc_pitch_roll(float acc_x, float acc_y, float acc_z, float *pitch, float 
 
 void initialise_monitor_handles();
 
-void init_GPIO_A1A2_output()
-{
-	GPIO_InitTypeDef GPIO_InitStruct;
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA,  ENABLE); // enable clock for GPIOA
-	GPIO_InitStruct.GPIO_OType 		= GPIO_OType_PP; // configure as push-pull
-	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT; // configure as outputs
-	GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_UP; // pull-up (logic 1 when floating)
-	GPIO_InitStruct.GPIO_Pin 			= GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4 ; // choose pins 1 and 2 (i.e., A1 and A2)
-	GPIO_InitStruct.GPIO_Speed 		= GPIO_Speed_25MHz; // set max update speed to 25 MHz
-	GPIO_Init( GPIOA, &GPIO_InitStruct); // initialize
-}
+
 
 
 int main(void)
@@ -203,6 +194,10 @@ int main(void)
   init_rng(); // initialize random number generator
   init_temperature_sensor();
 
+  //gpio for lm293 init
+  init_GPIO_A1A2A3A4_output();
+
+
   //usart init
   init_usart1(9600);
   usart_send( "UART1 Initialized. @9600bps\r\n");
@@ -210,8 +205,20 @@ int main(void)
   uint32_t t_prev = 0;
   while (1)
 	{
-	  //robot stuff
-	 //checkbutton();
+	//   //robot stuff
+	//  //checkbutton();
+   set_left_motor_direc(FORWARD,0);
+   set_right_motor_direc(BACKWARD,0);
+   move_forward();
+  //  delay_ms(3000);
+  //  // set_right_motor_direc(FORWARD,0);
+  //  // set_left_motor_direc(BACKWARD,0);
+   move_backward();
+  //  delay_ms(3000);
+  //  set_right_motor_direc(STOP,0);
+  //  set_left_motor_direc(STOP,0);
+  //  delay_ms(3000);
+
 
 
   }

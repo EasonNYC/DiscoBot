@@ -1,4 +1,4 @@
-# Source files 
+# Source files
 SRCS = main.c system_stm32f4xx.c funcs1.s
 
 ACCELEROMETER_SRCS = accelerometers/accelerometers.c accelerometers/tm_accelerometers/tm_stm32f4_lis302dl_lis3dsh.c accelerometers/tm_accelerometers/tm_stm32f4_spi.c
@@ -15,6 +15,9 @@ SRCS += $(TASK_SRCS)
 
 USART_SRCS = usart/usart.c
 SRCS += $(USART_SRCS)
+
+CAR_SRCS = car/car.c
+SRCS += $(CAR_SRCS)
 
 # Binary will be generated with this name (with .elf filename extension)
 PROJ_NAME=STM32_example
@@ -55,7 +58,7 @@ CFLAGS += -I$(STM_COMMON)/Libraries/STM32F4xx_StdPeriph_Driver/inc
 
 # Linker script
 LDSCRIPT = stm32_flash.ld
-LDFLAGS += -T$(LDSCRIPT) 
+LDFLAGS += -T$(LDSCRIPT)
 
 # add startup file to build
 SRCS += $(STM_COMMON)/Libraries/CMSIS/ST/STM32F4xx/Source/Templates/TrueSTUDIO/startup_stm32f4xx.s
@@ -66,7 +69,7 @@ SRCS += $(STM_SRCDIR)/stm32f4xx_gpio.c $(STM_SRCDIR)/stm32f4xx_spi.c $(STM_SRCDI
 
 OBJS = $(addprefix $(BUILDDIR)/, $(addsuffix .o, $(basename $(SRCS))))
 
-SEMIHOSTING_FLAGS = --specs=rdimon.specs -lc -lrdimon 
+SEMIHOSTING_FLAGS = --specs=rdimon.specs -lc -lrdimon
 
 ELF = $(PROJ_NAME).elf
 BIN = $(PROJ_NAME).bin
@@ -103,9 +106,8 @@ gdb: all
 	arm-none-eabi-gdb -tui $(ELF)
 
 # Start OpenOCD GDB server (supports semihosting)
-openocd: 
-	openocd -f board/stm32f4discovery.cfg 
+openocd:
+	openocd -f board/stm32f4discovery.cfg
 
 flash: $(BIN)
 	st-flash write $(BIN) 0x8000000
-
