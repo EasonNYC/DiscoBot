@@ -131,7 +131,6 @@ void init_systick(void)
   }
 }
 
-
 // pause for a specified number (n) of milliseconds
 /*
 void delay_ms(uint32_t n)
@@ -191,23 +190,21 @@ int main(void)
   init_rng(); // initialize random number generator
   init_temperature_sensor();
 
-  //gpio for lm293 init
+  //init gpio for lm293 init
   init_GPIO_A1A2A3A4_output();
-
 
   //usart init
   init_usart1(9600);
   usart1_send( "UART1 Initialized. @9600bps\r\n");
-
 
   uint32_t t_prev = 0;
   while (1)
 	{
 
 	  //check serial buffer for incoming bytes
-	  if(usart1_available() >0){
-		 //char mybyte =  (char)usart1_read(); //get/store byte
-		  printf("%c",usart1_readc()); //print byte as char
+	  while(usart1_available() > 0){ //if waiting for 5 bytes, might put avail() > 5 etc.
+		 //char mybyte =  (char)usart1_read(); //get/store next byte from buffer in a variable to do something with
+		  printf("%c",usart1_readc()); //print as a char the next byte available to read from buffer
 	  }
 
 	//   //robot stuff
@@ -227,7 +224,7 @@ int main(void)
 	 //timed task stuff
      if ((msTicks - t_prev) > 1000)
 		{
-    	 	//printf("usartavail: %d\n", usart1_available());
+    	 	printf("rx: %d\n", usart1_available()); //keep in for now. makes sure serial data coming through while loop is not optimized out.
 			t_prev = msTicks;
 		}
 

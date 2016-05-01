@@ -17,7 +17,7 @@
 
 
 #define MAX_STRLEN 50
-CircArr_InitTypeDef msg; //first create 1 circular array buffer called msg
+static CircArr_InitTypeDef msg; //first create 1 circular array buffer called msg
 //make above static?
 
 //buf_test(&msg);
@@ -142,7 +142,7 @@ char usart1_readc(void){
 }
 
 /**
- * @brief Function returns number of bytes waiting to be read in serial buffer
+ * @brief Function returns number of bytes waiting to be read in the serial buffer
  * @param none
  * @retval uint8_t
  */

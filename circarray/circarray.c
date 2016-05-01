@@ -59,7 +59,7 @@ bool buf_delete(CircArr_InitTypeDef* arr){
  */
 void initCircArray(CircArr_InitTypeDef* arr, uint32_t size)
 {
-	printf("initializing circ array\n");
+	//printf("initializing circ array\n");
 	//check for already initialized circarray. make resize another function
    if (arr->enabled){
 	   printf("error circ array already initialized\n");
