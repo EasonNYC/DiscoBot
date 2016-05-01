@@ -207,13 +207,13 @@ int main(void)
 	{
 	//   //robot stuff
 	//  //checkbutton();
-  //  // set_left_motor_direc(FORWARD,0);
-  //  // set_right_motor_direc(BACKWARD,0);
-  //  move_forward();
+   set_left_motor_direc(FORWARD,0);
+   set_right_motor_direc(BACKWARD,0);
+   move_forward();
   //  delay_ms(3000);
   //  // set_right_motor_direc(FORWARD,0);
   //  // set_left_motor_direc(BACKWARD,0);
-  //  move_backward();
+   move_backward();
   //  delay_ms(3000);
   //  set_right_motor_direc(STOP,0);
   //  set_left_motor_direc(STOP,0);

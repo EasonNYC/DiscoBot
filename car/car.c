@@ -125,40 +125,60 @@ void move_backward()
 
 }
 
+//NEED TO test the rest of these functions on the car
 void move_forward_soft_left()
 {
+  // set_left_motor_direc(STOP,0);
+  // set_right_motor_direc(FORWARD,0);
 }
 
 
 void move_forward_soft_right()
 {
+  // set_left_motor_direc(FORWARD,0);
+  // set_right_motor_direc(STOP,0);
 
 }
 
 
 void move_backward_soft_left()
 {
+  // set_left_motor_direc(STOP,0);
+  // set_right_motor_direc(BACKWARD,0);
+
 
 }
 
 void move_backward_soft_right()
 {
+  // set_left_motor_direc(BACKWARD,0);
+  // set_right_motor_direc(STOP,0);
+
 
 }
 
 
 void move_spin_right()
 {
+  // set_left_motor_direc(FORWARD,0);
+  // set_right_motor_direc(BACKWARD,0);
+
 
 }
 
 void move_spin_left()
 {
+  // set_left_motor_direc(BACKWARD,0);
+  // set_right_motor_direc(FORWARD,0);
+
 
 }
 
 
 void stop()
 {
+  // set_left_motor_direc(STOP,0);
+  // set_right_motor_direc(STOP,0);
+
 
 }
