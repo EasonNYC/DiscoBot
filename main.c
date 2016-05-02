@@ -113,13 +113,13 @@ void emptyfunc(void){
 	//for initialization in main loop
 }
 
-funcptr callme = emptyfunc;
+//funcptr callme = emptyfunc;
 char chlookup[4] = {'A', 'T', 'M', 'R'};
-funcptr flookup[4] = {printacc,
+/*funcptr flookup[4] = {printacc,
 											printtemp,
 											printtime,
 											printRNG};
-
+*/
 
 
 // initialize the system tick
@@ -178,6 +178,41 @@ void calc_pitch_roll(float acc_x, float acc_y, float acc_z, float *pitch, float 
 
 void initialise_monitor_handles();
 
+//incoming message id (used with funcptr array of motor commands)
+typedef enum
+  {
+    FWD = 0,
+    BWD =1,
+    FWDLEFT =2,
+	FWDRIGHT =3,
+	BCKLEFT =4,
+	BCKRIGHT =5,
+	SPINRIGHT =6,
+	SPINLEFT =7,
+	STOPCAR = 8,
+	MAXIDSIZE
+  } _ID;
+
+  _ID msgid = STOPCAR; //msgid 8 (stop)
+
+  funcptr flookup[MAXIDSIZE] = { //called with callme in main while loop
+		  move_forward, //msgid = 0
+		  move_backward,
+		  move_forward_soft_left,
+		  move_forward_soft_right,
+		  move_backward_soft_left,
+		  move_backward_soft_right,
+		  move_spin_right,
+		  move_spin_left,
+		  stop //msgid = 8
+  };
+
+  funcptr callme = stop; //first command to be called on startup is stop
+
+
+//incoming messages will be like '$'+'MSGID'+'*'
+//so the sequence $8* would be the message from java to call the stop function
+
 int main(void)
 {
   // initialize
@@ -197,18 +232,42 @@ int main(void)
   init_usart1(9600);
   usart1_send( "UART1 Initialized. @9600bps\r\n");
 
+
   uint32_t t_prev = 0;
   while (1)
 	{
 
-	  //check serial buffer for incoming bytes
-	  while(usart1_available() > 0){ //if waiting for 5 bytes, might put avail() > 5 etc.
+	  //check serial buffer for 3 incoming bytes
+	  while(usart1_available() > 3){ //if waiting for 5 bytes, might put avail() > 5 etc.
 		 //char mybyte =  (char)usart1_read(); //get/store next byte from buffer in a variable to do something with
-		  printf("%c",usart1_readc()); //print as a char the next byte available to read from buffer
+		  //printf("%c",usart1_readc()); //print as a char the next byte available to read from buffer
+
+		  //parse incoming message
+		  char start = usart1_readc();
+		  char last = 0;
+		  uint8_t rxid;
+
+		  if (start == '$') //if start byte (should be $)
+		  {
+			  rxid = usart1_read(); //next byte is msgID byte
+			  last = usart1_readc(); //get last byte (should be' *')
+		  }
+		  else
+		  {
+			  break; //bad message (discard incoming chars till it finds a $ symbol or buffer is empty)
+		  }
+
+	     if (last == '*') //its a good message
+		  {
+		  callme = flookup[rxid]; //assign function/motor command to be called by callme using rxid as index
+		  }
 	  }
 
-	//   //robot stuff
-	//  //checkbutton();
+	//robot stuff
+
+	callme(); //runs received wireless motor commands
+
+	//below may not be nessisary anymore
    set_left_motor_direc(FORWARD,0);
    set_right_motor_direc(BACKWARD,0);
    move_forward();
@@ -221,10 +280,17 @@ int main(void)
   //  set_left_motor_direc(STOP,0);
   //  delay_ms(3000);
 
-	 //timed task stuff
+   //  //checkbutton();
+
+
+   //timed task stuff
      if ((msTicks - t_prev) > 1000)
 		{
-    	 	printf("rx: %d\n", usart1_available()); //keep in for now. makes sure serial data coming through while loop is not optimized out.
+
+    	 //send outgoing messages to java here
+    	 //somesendfunction(message)
+
+    	 printf("rx: %d\n", usart1_available()); //keep in for now. makes sure serial data coming through while loop is not optimized out.
 			t_prev = msTicks;
 		}
 
