@@ -3,6 +3,8 @@ package application;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import application.util.ImageLoader;
+import application.util.SerialPortWriter;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -15,7 +17,6 @@ import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import application.loaders.ImageLoader;
 
 /**
  * This class is the controller class of the DiscoBot GUI specified by
@@ -66,6 +67,9 @@ public class RootLayoutController extends AnchorPane implements Initializable {
 		setButtonActions();
 		bindKeyEventsToScene();
 		addDirectionalBooleanListeners();
+		
+		// serial port stuff
+		SerialPortWriter.printPortNames();
 	}
 
 	private void addDirectionalBooleanListeners() {

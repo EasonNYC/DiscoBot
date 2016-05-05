@@ -1,4 +1,4 @@
-package application.loaders;
+package application.util;
 
 import java.io.IOException;
 import java.io.InputStream;
