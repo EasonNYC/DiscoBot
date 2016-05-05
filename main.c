@@ -238,17 +238,21 @@ int main(void)
 	{
 
 	  //check serial buffer for 3 incoming bytes
-	  while(usart1_available() > 3){ //if waiting for 5 bytes, might put avail() > 5 etc.
+	  while(usart1_available() >= 3){ //if waiting for 5 bytes, might put avail() > 5 etc.
 		 //char mybyte =  (char)usart1_read(); //get/store next byte from buffer in a variable to do something with
 		  //printf("%c",usart1_readc()); //print as a char the next byte available to read from buffer
 
 		  //parse incoming message
+      printf("received\n");
 		  char start = usart1_readc();
 		  char last = 0;
 		  uint8_t rxid;
+      printf("received %c", start);
+
 
 		  if (start == '$') //if start byte (should be $)
 		  {
+        printf("made it\n");
 			  rxid = usart1_read(); //next byte is msgID byte
 			  last = usart1_readc(); //get last byte (should be' *')
 		  }
@@ -259,6 +263,8 @@ int main(void)
 
 	     if (last == '*') //its a good message
 		  {
+        printf("made itcallme\n");
+
 		  callme = flookup[rxid]; //assign function/motor command to be called by callme using rxid as index
 		  }
 	  }
@@ -268,13 +274,13 @@ int main(void)
 	callme(); //runs received wireless motor commands
 
 	//below may not be nessisary anymore
-   set_left_motor_direc(FORWARD,0);
-   set_right_motor_direc(BACKWARD,0);
-   move_forward();
+  //  set_left_motor_direc(FORWARD,0);
+  //  set_right_motor_direc(BACKWARD,0);
+  //  move_forward();
   //  delay_ms(3000);
   //  // set_right_motor_direc(FORWARD,0);
   //  // set_left_motor_direc(BACKWARD,0);
-   move_backward();
+  //  move_backward();
   //  delay_ms(3000);
   //  set_right_motor_direc(STOP,0);
   //  set_left_motor_direc(STOP,0);
