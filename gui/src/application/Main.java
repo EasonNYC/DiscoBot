@@ -57,7 +57,8 @@ public class Main extends Application {
 			Parent root = primaryScene.getRoot();
 			for (Node node : root.getChildrenUnmodifiable())
 				node.setStyle("-fx-focus-color: -fx-outer-border; -fx-faint-focus-color: transparent;");
-
+			
+			((RootLayoutController) rootLayoutController).setStage(primaryStage);
 		} catch (IOException e) {
 			System.out.println("could not initialize root layout.");
 			e.printStackTrace();
