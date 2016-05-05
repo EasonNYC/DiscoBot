@@ -20,7 +20,7 @@ import javafx.stage.Stage;
 
 /**
  * This class is the controller class of the DiscoBot GUI specified by
- * applicaton.view.RootLayout.fxml. Communicates at 9600 baud.
+ * applicaton.view.RootLayout.fxml.
  * 
  * @author Doris Tang
  *
@@ -69,7 +69,7 @@ public class RootLayoutController extends AnchorPane implements Initializable {
 		addDirectionalBooleanListeners();
 		
 		// serial port stuff
-		SerialPortWriter.printPortNames();
+		SerialPortWriter.printSerialPortNames();
 	}
 
 	private void addDirectionalBooleanListeners() {
