@@ -10,8 +10,9 @@
 #include "RNG/random_number_generator.h"
 #include "Task/timed_task.h"
 #include "usart/usart.h"
+#include "car/car.h"
 
-#define NUMLETTERS 26
+//#include "circarray/circarray.h"
 
 static void init_systick();
 //static void delay_ms(uint32_t n);
@@ -112,13 +113,13 @@ void emptyfunc(void){
 	//for initialization in main loop
 }
 
-funcptr callme = emptyfunc;
+//funcptr callme = emptyfunc;
 char chlookup[4] = {'A', 'T', 'M', 'R'};
-funcptr flookup[4] = {printacc,
+/*funcptr flookup[4] = {printacc,
 											printtemp,
 											printtime,
 											printRNG};
-
+*/
 
 
 // initialize the system tick
@@ -129,7 +130,6 @@ void init_systick(void)
     while (1);                                  /* Capture error              */
   }
 }
-
 
 // pause for a specified number (n) of milliseconds
 /*
@@ -178,18 +178,40 @@ void calc_pitch_roll(float acc_x, float acc_y, float acc_z, float *pitch, float 
 
 void initialise_monitor_handles();
 
-void init_GPIO_A1A2_output()
-{
-	GPIO_InitTypeDef GPIO_InitStruct;
-	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA,  ENABLE); // enable clock for GPIOA
-	GPIO_InitStruct.GPIO_OType 		= GPIO_OType_PP; // configure as push-pull
-	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT; // configure as outputs
-	GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_UP; // pull-up (logic 1 when floating)
-	GPIO_InitStruct.GPIO_Pin 			= GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4 ; // choose pins 1 and 2 (i.e., A1 and A2)
-	GPIO_InitStruct.GPIO_Speed 		= GPIO_Speed_25MHz; // set max update speed to 25 MHz
-	GPIO_Init( GPIOA, &GPIO_InitStruct); // initialize
-}
+//incoming message id (used with funcptr array of motor commands)
+typedef enum
+  {
+    FWD = 0,
+    BWD =1,
+    FWDLEFT =2,
+	FWDRIGHT =3,
+	BCKLEFT =4,
+	BCKRIGHT =5,
+	SPINRIGHT =6,
+	SPINLEFT =7,
+	STOPCAR = 8,
+	MAXIDSIZE
+  } _ID;
 
+  _ID msgid = STOPCAR; //msgid 8 (stop)
+
+  funcptr flookup[MAXIDSIZE] = { //called with callme in main while loop
+		  move_forward, //msgid = 0
+		  move_backward,
+		  move_forward_soft_left,
+		  move_forward_soft_right,
+		  move_backward_soft_left,
+		  move_backward_soft_right,
+		  move_spin_right,
+		  move_spin_left,
+		  stop //msgid = 8
+  };
+
+  funcptr callme = stop; //first command to be called on startup is stop
+
+
+//incoming messages will be like '$'+'MSGID'+'*'
+//so the sequence $8* would be the message from java to call the stop function
 
 int main(void)
 {
@@ -203,16 +225,74 @@ int main(void)
   init_rng(); // initialize random number generator
   init_temperature_sensor();
 
+  //init gpio for lm293 init
+  init_GPIO_A1A2A3A4_output();
+
   //usart init
   init_usart1(9600);
-  usart_send( "UART1 Initialized. @9600bps\r\n");
-  printf("start receiving data\n");
+  usart1_send( "UART1 Initialized. @9600bps\r\n");
+
+
   uint32_t t_prev = 0;
   while (1)
 	{
-	  //robot stuff
-	 //checkbutton();
 
+	  //check serial buffer for 3 incoming bytes
+	  while(usart1_available() > 3){ //if waiting for 5 bytes, might put avail() > 5 etc.
+		 //char mybyte =  (char)usart1_read(); //get/store next byte from buffer in a variable to do something with
+		  //printf("%c",usart1_readc()); //print as a char the next byte available to read from buffer
+
+		  //parse incoming message
+		  char start = usart1_readc();
+		  char last = 0;
+		  uint8_t rxid;
+
+		  if (start == '$') //if start byte (should be $)
+		  {
+			  rxid = usart1_read(); //next byte is msgID byte
+			  last = usart1_readc(); //get last byte (should be' *')
+		  }
+		  else
+		  {
+			  break; //bad message (discard incoming chars till it finds a $ symbol or buffer is empty)
+		  }
+
+	     if (last == '*') //its a good message
+		  {
+		  callme = flookup[rxid]; //assign function/motor command to be called by callme using rxid as index
+		  }
+	  }
+
+	//robot stuff
+
+	callme(); //runs received wireless motor commands
+
+	//below may not be nessisary anymore
+   set_left_motor_direc(FORWARD,0);
+   set_right_motor_direc(BACKWARD,0);
+   move_forward();
+  //  delay_ms(3000);
+  //  // set_right_motor_direc(FORWARD,0);
+  //  // set_left_motor_direc(BACKWARD,0);
+   move_backward();
+  //  delay_ms(3000);
+  //  set_right_motor_direc(STOP,0);
+  //  set_left_motor_direc(STOP,0);
+  //  delay_ms(3000);
+
+   //  //checkbutton();
+
+
+   //timed task stuff
+     if ((msTicks - t_prev) > 1000)
+		{
+
+    	 //send outgoing messages to java here
+    	 //somesendfunction(message)
+
+    	 printf("rx: %d\n", usart1_available()); //keep in for now. makes sure serial data coming through while loop is not optimized out.
+			t_prev = msTicks;
+		}
 
   }
 }
