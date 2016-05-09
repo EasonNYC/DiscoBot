@@ -17,15 +17,15 @@ public class SerialPortUtil {
 	private SerialPort port;
 
 	private final String SERIAL_PORT_ID = "/dev/tty.usbserial";
-	private final int START_BYTE = 36; // dollar symbol
-	private final int STOP_BYTE = 42; // star symbol
+	private final byte START_BYTE = 36; // dollar symbol
+	private final byte STOP_BYTE = 42; // star symbol
 
 	public SerialPortUtil() {
 		portNames = SerialPortList.getPortNames();
 	}
 
 	/**
-	 * Connects to serial port and sets appropriate connection params 
+	 * Connects to serial port and sets appropriate connection params
 	 */
 	public void openPort() {
 		port = new SerialPort(SERIAL_PORT_ID);
@@ -45,7 +45,7 @@ public class SerialPortUtil {
 			}
 		}
 	}
-	
+
 	public void writeToPort() {
 		byte[] msg = new byte[] { START_BYTE, 8, STOP_BYTE };
 
@@ -60,7 +60,7 @@ public class SerialPortUtil {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void closePort() {
 		try {
 			port.closePort();
@@ -71,9 +71,16 @@ public class SerialPortUtil {
 		}
 	}
 
-	public void writeStringToPort(String msg) {
+	public void writeByteToPort(byte msg) {
 		if (port != null) {
-
+			try {
+				port.writeByte(START_BYTE);
+				port.writeByte(msg);
+				port.writeByte(STOP_BYTE);
+			} catch (SerialPortException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 

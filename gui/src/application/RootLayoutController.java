@@ -14,6 +14,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -44,10 +45,13 @@ public class RootLayoutController extends AnchorPane implements Initializable {
 	private BooleanProperty leftPressed;
 	private BooleanProperty rightPressed;
 
+	private SerialPortUtil portUtil;
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// insert icon images
 		attachButtonGraphics();
+		portUtil = new SerialPortUtil();
 	}
 
 	/**
@@ -67,12 +71,19 @@ public class RootLayoutController extends AnchorPane implements Initializable {
 		setButtonActions();
 		bindKeyEventsToScene();
 		addDirectionalBooleanListeners();
-		
-		// serial port stuff
-		SerialPortUtil portUtil = new SerialPortUtil();
+	}
+	
+	public void openPort() {
 		portUtil.printSerialPortNames();
 		portUtil.openPort();
-		portUtil.writeToPort();
+	}
+
+	public void testSerialPortWrite() {
+		// change this for hardcoded testing/ connection
+		portUtil.writeByteToPort(FORWARD);
+	}
+	
+	public void closePort() {
 		portUtil.closePort();
 	}
 
@@ -80,11 +91,122 @@ public class RootLayoutController extends AnchorPane implements Initializable {
 		upPressed.addListener(new ChangeListener<Boolean>() {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-
+				if (newValue) {
+					//portUtil.writeByteToPort(FORWARD);
+					upBtn.setGraphic(ImageLoader.getUpInv());
+				} else {
+					upBtn.setGraphic(ImageLoader.getUp());
+				}
+			}
+		});
+		
+		downPressed.addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				if (newValue) {
+					//portUtil.writeByteToPort(FORWARD);
+					downBtn.setGraphic(ImageLoader.getDownInv());
+				} else {
+					downBtn.setGraphic(ImageLoader.getDown());
+				}
+			}
+		});
+		
+		leftPressed.addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				if (newValue) {
+					//portUtil.writeByteToPort(FORWARD);
+					leftBtn.setGraphic(ImageLoader.getLeftInv());
+				} else {
+					leftBtn.setGraphic(ImageLoader.getLeft());
+				}
+			}
+		});
+		
+		rightPressed.addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				if (newValue) {
+					//portUtil.writeByteToPort(FORWARD);
+					rightBtn.setGraphic(ImageLoader.getRightInv());
+				} else {
+					rightBtn.setGraphic(ImageLoader.getRight());
+				}
 			}
 		});
 	}
 
+	/**
+	 * Sends the UP command to the serial port.
+	 */
+	private void doUpAction() {
+		System.out.println("up");
+		upPressed.set(!upPressed.get());
+	}
+
+	/**
+	 * Sends the DOWN command to the serial port.
+	 */
+	private void doDownAction() {
+		System.out.println("down");
+		downPressed.set(!downPressed.get());
+	}
+
+	/**
+	 * Sends the LEFT command to the serial port.
+	 */
+	private void doLeftAction() {
+		System.out.println("left");
+		leftPressed.set(!leftPressed.get());
+	}
+
+	/**
+	 * Sends the RIGHT command to the serial port.
+	 */
+	private void doRightAction() {
+		System.out.println("right");
+		rightPressed.set(!rightPressed.get());
+	}
+
+	/**
+	 * Binds a {@link KeyEvent} to its appropriate arrow button.
+	 */
+	private void bindKeyEventsToScene() {
+		stage.getScene().setOnKeyPressed(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
+				switch (event.getCode()) {
+				case UP:
+					upBtn.fire();
+					break;
+				case DOWN:
+					downBtn.fire();
+					break;
+				case LEFT:
+					leftBtn.fire();
+					break;
+				case RIGHT:
+					rightBtn.fire();
+					break;
+				default:
+					break;
+				}
+			}
+		});
+	}
+
+	/**
+	 * Sets the graphic of the buttons to the appropriate {@link ImageView}.
+	 */
+	private void attachButtonGraphics() {
+		ImageLoader.loadImages();
+		upBtn.setGraphic(ImageLoader.getUp());
+		downBtn.setGraphic(ImageLoader.getDown());
+		leftBtn.setGraphic(ImageLoader.getLeft());
+		rightBtn.setGraphic(ImageLoader.getRight());
+	}
+	
 	/**
 	 * Sets the onAction property of arrow buttons.
 	 */
@@ -118,92 +240,7 @@ public class RootLayoutController extends AnchorPane implements Initializable {
 		});
 	}
 
-	/**
-	 * Sends the UP command to the serial port.
-	 */
-	private void doUpAction() {
-		System.out.println("up");
-	}
-
-	/**
-	 * Sends the DOWN command to the serial port.
-	 */
-	private void doDownAction() {
-		System.out.println("down");
-	}
-
-	/**
-	 * Sends the LEFT command to the serial port.
-	 */
-	private void doLeftAction() {
-		System.out.println("left");
-	}
-
-	/**
-	 * Sends the RIGHT command to the serial port.
-	 */
-	private void doRightAction() {
-		System.out.println("right");
-	}
-
-	/**
-	 * Binds a {@link KeyEvent} to its appropriate arrow button.
-	 */
-	private void bindKeyEventsToScene() {
-		stage.getScene().setOnKeyPressed(new EventHandler<KeyEvent>() {
-			@Override
-			public void handle(KeyEvent event) {
-				switch (event.getCode()) {
-				case I:
-					upPressed.set(true);
-					break;
-				case K:
-					downPressed.set(true);
-					break;
-				case J:
-					leftPressed.set(true);
-					break;
-				case L:
-					rightPressed.set(true);
-					break;
-				default:
-					break;
-				}
-			}
-		});
-
-		stage.getScene().setOnKeyReleased(new EventHandler<KeyEvent>() {
-			@Override
-			public void handle(KeyEvent event) {
-				switch (event.getCode()) {
-				case I:
-					upPressed.set(false);
-					break;
-				case K:
-					downPressed.set(false);
-					break;
-				case J:
-					leftPressed.set(false);
-					break;
-				case L:
-					rightPressed.set(false);
-					break;
-				default:
-					break;
-				}
-			}
-		});
-	}
-
-	/**
-	 * Sets the graphic of the buttons to the appropriate {@link ImageView}.
-	 */
-	private void attachButtonGraphics() {
-		ImageLoader.loadImages();
-		upBtn.setGraphic(ImageLoader.getUp());
-		downBtn.setGraphic(ImageLoader.getDown());
-		leftBtn.setGraphic(ImageLoader.getLeft());
-		rightBtn.setGraphic(ImageLoader.getRight());
-	}
+	private final byte FORWARD = 0, BACKWARD = 1, FORWARD_LEFT = 2, FORWARD_RIGHT = 3, BACK_LEFT = 4, BACK_RIGHT = 5,
+			SPIN_RIGHT = 6, SPIN_LEFT = 7, STOP = 8;
 
 }
