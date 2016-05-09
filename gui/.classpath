@@ -8,5 +8,6 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/Users/DTang/Projects/Real Time Embedded Systems/DiscoBot/gui/lib/rxtx-2.1-7-bins-r2/Mac_OS_X"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="lib/jmf.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
