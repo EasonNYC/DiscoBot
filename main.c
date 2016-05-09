@@ -238,7 +238,7 @@ int main(void)
 	{
 
 	  //check serial buffer for 3 incoming bytes
-	  while(usart1_available() >= 3){ //if waiting for 5 bytes, might put avail() > 5 etc.
+	  while(usart1_available() > 2){ //if waiting for 5 bytes, might put avail() > 5 etc.
 		 //char mybyte =  (char)usart1_read(); //get/store next byte from buffer in a variable to do something with
 		  //printf("%c",usart1_readc()); //print as a char the next byte available to read from buffer
 
@@ -254,6 +254,7 @@ int main(void)
 		  {
         printf("made it\n");
 			  rxid = usart1_read(); //next byte is msgID byte
+        rxid -= 48;
 			  last = usart1_readc(); //get last byte (should be' *')
 		  }
 		  else
@@ -263,7 +264,7 @@ int main(void)
 
 	     if (last == '*') //its a good message
 		  {
-        printf("made itcallme\n");
+        printf("made itcallme, rxid: %d\n", rxid);
 
 		  callme = flookup[rxid]; //assign function/motor command to be called by callme using rxid as index
 		  }
