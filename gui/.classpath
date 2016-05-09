@@ -3,7 +3,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER"/>
-	<classpathentry kind="lib" path="/Users/DTang/Projects/Real Time Embedded Systems/DiscoBot/gui/lib/rxtx-2.1-7-bins-r2/RXTXcomm.jar">
+	<classpathentry exported="true" kind="lib" path="/Users/DTang/Projects/Real Time Embedded Systems/DiscoBot/gui/lib/rxtx-2.1-7-bins-r2/RXTXcomm.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="/Users/DTang/Projects/Real Time Embedded Systems/DiscoBot/gui/lib/rxtx-2.1-7-bins-r2/Mac_OS_X"/>
 		</attributes>
