@@ -14,7 +14,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -72,7 +71,7 @@ public class RootLayoutController extends AnchorPane implements Initializable {
 		bindKeyEventsToScene();
 		addDirectionalBooleanListeners();
 	}
-	
+
 	public void openPort() {
 		portUtil.printSerialPortNames();
 		portUtil.openPort();
@@ -82,56 +81,156 @@ public class RootLayoutController extends AnchorPane implements Initializable {
 		// change this for hardcoded testing/ connection
 		portUtil.writeByteToPort(FORWARD);
 	}
-	
+
 	public void closePort() {
 		portUtil.closePort();
 	}
 
+	// TODO
 	private void addDirectionalBooleanListeners() {
 		upPressed.addListener(new ChangeListener<Boolean>() {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				boolean down, left, right;
+				down = isDownPressed();
+				left = isLeftPressed();
+				right = isRightPressed();
+
 				if (newValue) {
-					//portUtil.writeByteToPort(FORWARD);
 					upBtn.setGraphic(ImageLoader.getUpInv());
+
+					if (!down && !left && !right) {
+						System.out.println("0: forward-up");
+					} else {
+						if (down)
+							upPressed.set(false);
+						else if (left)
+							System.out.println("2: forward left-up");
+						else if (right)
+							System.out.println("3: forward right-up");
+					}
 				} else {
 					upBtn.setGraphic(ImageLoader.getUp());
+
+					if (!down && !left && !right) {
+						System.out.println("8: stop-up");
+					} else if (!down) {
+						if (left)
+							System.out.println("7: spin left-up");
+						else if (right)
+							System.out.println("6: spin right-up");
+					}
 				}
 			}
 		});
-		
+
 		downPressed.addListener(new ChangeListener<Boolean>() {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				boolean up, left, right;
+				up = isUpPressed();
+				left = isLeftPressed();
+				right = isRightPressed();
+
 				if (newValue) {
-					//portUtil.writeByteToPort(FORWARD);
 					downBtn.setGraphic(ImageLoader.getDownInv());
+
+					if (!up && !left && !right)
+						System.out.println("1: backward-d");
+					else {
+						if (up)
+							downPressed.set(false);
+						else if (left)
+							System.out.println("4: backward left-d");
+						else if (right)
+							System.out.println("5: backward right-d");
+					}
+
 				} else {
 					downBtn.setGraphic(ImageLoader.getDown());
+
+					if (!up && !left && !right)
+						System.out.println("8: stop-d");
+					else if (!up) {
+						if (left)
+							System.out.println("7: spin left-d");
+						else if (right)
+							System.out.println("6: spin right-d");
+					}
 				}
 			}
 		});
-		
+
 		leftPressed.addListener(new ChangeListener<Boolean>() {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				boolean up, down, right;
+				up = isUpPressed();
+				down = isDownPressed();
+				right = isRightPressed();
+
 				if (newValue) {
-					//portUtil.writeByteToPort(FORWARD);
 					leftBtn.setGraphic(ImageLoader.getLeftInv());
+
+					if (!up && !down && !right)
+						System.out.println("7: spin left-l");
+					else {
+						if (right)
+							leftPressed.set(false);
+						else if (up)
+							System.out.println("2: forward left-l");
+						else if (down)
+							System.out.println("4: backward left-l");
+					}
+
 				} else {
 					leftBtn.setGraphic(ImageLoader.getLeft());
+
+					if (!up && !down && !right)
+						System.out.println("8: stop");
+					else if (!right) {
+						if (up)
+							System.out.println("0: forward-l");
+						else if (down)
+							System.out.println("1: backward-l");
+					}
 				}
 			}
 		});
-		
+
 		rightPressed.addListener(new ChangeListener<Boolean>() {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				boolean up, down, left;
+				up = isUpPressed();
+				down = isDownPressed();
+				left = isLeftPressed();
+
 				if (newValue) {
-					//portUtil.writeByteToPort(FORWARD);
 					rightBtn.setGraphic(ImageLoader.getRightInv());
+
+					if (!up && !down && !left)
+						System.out.println("6: spin right-r");
+					else {
+						if (left)
+							rightPressed.set(false);
+						else if (up)
+							System.out.println("3: forward right-r");
+						else if (down)
+							System.out.println("5: backward right-r");
+					}
+
 				} else {
 					rightBtn.setGraphic(ImageLoader.getRight());
+
+					if (!up && !down && !left)
+						System.out.println("8: stop-r");
+					else if (!left) {
+						if (up)
+							System.out.println("0: forward-r");
+						else if (down)
+							System.out.println("1: backward-r");
+					}
 				}
 			}
 		});
@@ -141,7 +240,6 @@ public class RootLayoutController extends AnchorPane implements Initializable {
 	 * Sends the UP command to the serial port.
 	 */
 	private void doUpAction() {
-		System.out.println("up");
 		upPressed.set(!upPressed.get());
 	}
 
@@ -149,7 +247,6 @@ public class RootLayoutController extends AnchorPane implements Initializable {
 	 * Sends the DOWN command to the serial port.
 	 */
 	private void doDownAction() {
-		System.out.println("down");
 		downPressed.set(!downPressed.get());
 	}
 
@@ -157,7 +254,6 @@ public class RootLayoutController extends AnchorPane implements Initializable {
 	 * Sends the LEFT command to the serial port.
 	 */
 	private void doLeftAction() {
-		System.out.println("left");
 		leftPressed.set(!leftPressed.get());
 	}
 
@@ -165,7 +261,6 @@ public class RootLayoutController extends AnchorPane implements Initializable {
 	 * Sends the RIGHT command to the serial port.
 	 */
 	private void doRightAction() {
-		System.out.println("right");
 		rightPressed.set(!rightPressed.get());
 	}
 
@@ -206,7 +301,7 @@ public class RootLayoutController extends AnchorPane implements Initializable {
 		leftBtn.setGraphic(ImageLoader.getLeft());
 		rightBtn.setGraphic(ImageLoader.getRight());
 	}
-	
+
 	/**
 	 * Sets the onAction property of arrow buttons.
 	 */
@@ -238,6 +333,22 @@ public class RootLayoutController extends AnchorPane implements Initializable {
 				doRightAction();
 			}
 		});
+	}
+
+	private boolean isUpPressed() {
+		return upPressed.get();
+	}
+
+	private boolean isDownPressed() {
+		return downPressed.get();
+	}
+
+	private boolean isLeftPressed() {
+		return leftPressed.get();
+	}
+
+	private boolean isRightPressed() {
+		return rightPressed.get();
 	}
 
 	private final byte FORWARD = 0, BACKWARD = 1, FORWARD_LEFT = 2, FORWARD_RIGHT = 3, BACK_LEFT = 4, BACK_RIGHT = 5,
