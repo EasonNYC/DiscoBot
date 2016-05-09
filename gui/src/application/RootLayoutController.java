@@ -4,7 +4,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import application.util.ImageLoader;
-import application.util.SerialPortWriter;
+import application.util.SerialPortUtil;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -69,14 +69,18 @@ public class RootLayoutController extends AnchorPane implements Initializable {
 		addDirectionalBooleanListeners();
 		
 		// serial port stuff
-		SerialPortWriter.printSerialPortNames();
+		SerialPortUtil portUtil = new SerialPortUtil();
+		portUtil.printSerialPortNames();
+		portUtil.openPort();
+		portUtil.writeToPort();
+		portUtil.closePort();
 	}
 
 	private void addDirectionalBooleanListeners() {
 		upPressed.addListener(new ChangeListener<Boolean>() {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-				
+
 			}
 		});
 	}
