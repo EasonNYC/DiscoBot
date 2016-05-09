@@ -12,13 +12,15 @@ A Real Time Embedded STM32 Discovery robot. Stayin' Alive.
 
 For PC controlled xbee:
 
-| FTDI PIN  | XBEE PIN  |
+| USB/FTDI PIN  | XBEE PIN  |
 | ------------ |:----------------:|
-| GND          | GND              |
-| 5V           | 5V              |
-| RX          | TX              |
-| TX          | RX              |
-| PD0          | EOC              |
+| GND (b)      | GND              |
+| 5V (r)       | 5V              |
+| RX (w)       | TX              |
+| TX (g)       | RX              |
+| n/A          | n/a              |
+
+
 
 For robot Xbee:
 
