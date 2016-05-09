@@ -254,7 +254,7 @@ int main(void)
 		  {
         printf("made it\n");
 			  rxid = usart1_read(); //next byte is msgID byte
-        rxid -= 48;
+        //rxid -= 48; //convert from ascii to regular number
 			  last = usart1_readc(); //get last byte (should be' *')
 		  }
 		  else
