@@ -5,6 +5,7 @@ import java.util.ResourceBundle;
 
 import application.util.ImageLoader;
 import application.util.SerialPortUtil;
+
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -18,9 +19,10 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+
 /**
  * This class is the controller class of the DiscoBot GUI specified by
- * applicaton.view.RootLayout.fxml.
+ * applicaton.view.RootLayout.fxml. Communicates at 9600 baud.
  * 
  * @author Doris Tang
  *
@@ -50,6 +52,7 @@ public class RootLayoutController extends AnchorPane implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		// insert icon images
 		attachButtonGraphics();
+
 		portUtil = new SerialPortUtil();
 	}
 
@@ -86,7 +89,7 @@ public class RootLayoutController extends AnchorPane implements Initializable {
 		portUtil.closePort();
 	}
 
-	// TODO
+	
 	private void addDirectionalBooleanListeners() {
 		upPressed.addListener(new ChangeListener<Boolean>() {
 			@Override

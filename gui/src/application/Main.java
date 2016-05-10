@@ -63,7 +63,6 @@ public class Main extends Application {
 			// TODO
 			// ((RootLayoutController) rootLayoutController).openPort();
 			// ((RootLayoutController) rootLayoutController).testSerialPortWrite();
-
 		} catch (IOException e) {
 			System.out.println("could not initialize root layout.");
 			e.printStackTrace();
