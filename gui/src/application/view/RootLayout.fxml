@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<fx:root prefHeight="200.0" prefWidth="200.0" type="AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root prefWidth="200.0" type="AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -22,7 +22,6 @@
                   <Region layoutX="10.0" layoutY="10.0" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
                </children>
             </HBox>
-            <Region VBox.vgrow="ALWAYS" />
             <HBox>
                <children>
                   <Region HBox.hgrow="ALWAYS" />
@@ -40,9 +39,9 @@
                      <children>
                         <HBox>
                            <children>
-                              <Region maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+                              <Region HBox.hgrow="ALWAYS" />
                               <Button fx:id="upBtn" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" />
-                              <Region maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+                              <Region HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
                         <HBox>
@@ -50,16 +49,23 @@
                               <Region HBox.hgrow="ALWAYS" />
                               <Button fx:id="leftBtn" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" />
                               <Region HBox.hgrow="ALWAYS" />
-                              <Button fx:id="downBtn" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" />
+                              <Button fx:id="stopBtn" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" />
                               <Region HBox.hgrow="ALWAYS" />
                               <Button fx:id="rightBtn" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" />
                               <Region HBox.hgrow="ALWAYS" />
                            </children>
-                           <padding>
-                              <Insets bottom="5.0" />
-                           </padding>
+                        </HBox>
+                        <HBox layoutX="10.0" layoutY="10.0">
+                           <children>
+                              <Region HBox.hgrow="ALWAYS" />
+                              <Button fx:id="downBtn" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="50.0" prefWidth="50.0" />
+                              <Region HBox.hgrow="ALWAYS" />
+                           </children>
                         </HBox>
                      </children>
+                     <padding>
+                        <Insets bottom="7.0" />
+                     </padding>
                   </VBox>
                </children>
             </HBox>

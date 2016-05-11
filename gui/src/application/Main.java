@@ -58,6 +58,11 @@ public class Main extends Application {
 			for (Node node : root.getChildrenUnmodifiable())
 				node.setStyle("-fx-focus-color: -fx-outer-border; -fx-faint-focus-color: transparent;");
 
+			((RootLayoutController) rootLayoutController).setStage(primaryStage);
+
+			// TODO
+			// ((RootLayoutController) rootLayoutController).openPort();
+			// ((RootLayoutController) rootLayoutController).testSerialPortWrite();
 		} catch (IOException e) {
 			System.out.println("could not initialize root layout.");
 			e.printStackTrace();
@@ -66,6 +71,7 @@ public class Main extends Application {
 		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			@Override
 			public void handle(WindowEvent event) {
+				//((RootLayoutController) rootLayoutController).closePort();
 				System.out.println("exiting...");
 			}
 		});
