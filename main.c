@@ -52,7 +52,7 @@ void SysTick_Handler(void){
   }
   else
   {
-	    //reset counter
+      //reset counter
        b_i = 0;
        buttstate = ButtonIsReleased;
   }
@@ -70,12 +70,12 @@ void checkbutton(void)
 
         case ButtonIsPressed:
             //printf("Button pressed\n");
-        	   //do something
+             //do something
             break;
 
         case ButtonIsReleased:
             //printf("Button released\n");
-          	//do something else
+            //do something else
             break;
 
         }
@@ -90,42 +90,42 @@ typedef void (*funcptr)(void);
 
 //functions to point to
 void printacc(void){
-	 float a[3]; // array of 3 floats into which accelerometer data will be read
-	 read_accelerometers(a); // read data from accelerometers (X, Y, and Z axes)
-	  printf("%f %f %f\n", a[0], a[1], a[2]);
-	  float pitch, roll;
-	  calc_pitch_roll(a[0], a[1], a[2], &pitch, &roll);
-	  printf("Pitch = %f, Roll = %f\n", pitch, roll);
+   float a[3]; // array of 3 floats into which accelerometer data will be read
+   read_accelerometers(a); // read data from accelerometers (X, Y, and Z axes)
+    printf("%f %f %f\n", a[0], a[1], a[2]);
+    float pitch, roll;
+    calc_pitch_roll(a[0], a[1], a[2], &pitch, &roll);
+    printf("Pitch = %f, Roll = %f\n", pitch, roll);
 
 }
 void printtemp(void){
-	float temp = read_temperature_sensor();
-	printf("Temp = %f\n",temp);
+  float temp = read_temperature_sensor();
+  printf("Temp = %f\n",temp);
 }
 void printtime(void){
 printf("msTicks = %d\n",msTicks);
 }
 void printRNG(void){
-	 uint32_t r = get_random_number();
-	  printf("Random = %lu\n",r); // print unsigned int
+   uint32_t r = get_random_number();
+    printf("Random = %lu\n",r); // print unsigned int
 }
 void emptyfunc(void){
-	//for initialization in main loop
+  //for initialization in main loop
 }
 
 //funcptr callme = emptyfunc;
 char chlookup[4] = {'A', 'T', 'M', 'R'};
 /*funcptr flookup[4] = {printacc,
-											printtemp,
-											printtime,
-											printRNG};
+                      printtemp,
+                      printtime,
+                      printRNG};
 */
 
 
 // initialize the system tick
 void init_systick(void)
 {
-	SystemCoreClockUpdate();                      /* Get Core Clock Frequency   */
+  SystemCoreClockUpdate();                      /* Get Core Clock Frequency   */
   if (SysTick_Config(SystemCoreClock / 1000)) { /* SysTick 1 msec interrupts  */
     while (1);                                  /* Capture error              */
   }
@@ -172,8 +172,8 @@ void init_button()
 
 void calc_pitch_roll(float acc_x, float acc_y, float acc_z, float *pitch, float *roll)
 {
-	*roll = (180.0/M_PI)*atan2(acc_y, acc_z);
-	*pitch = (180.0/M_PI)*atan2(-acc_x, sqrt(acc_y*acc_y+acc_z*acc_z));
+  *roll = (180.0/M_PI)*atan2(acc_y, acc_z);
+  *pitch = (180.0/M_PI)*atan2(-acc_x, sqrt(acc_y*acc_y+acc_z*acc_z));
 }
 
 void initialise_monitor_handles();
@@ -184,27 +184,27 @@ typedef enum
     FWD = 0,
     BWD =1,
     FWDLEFT =2,
-	FWDRIGHT =3,
-	BCKLEFT =4,
-	BCKRIGHT =5,
-	SPINRIGHT =6,
-	SPINLEFT =7,
-	STOPCAR = 8,
-	MAXIDSIZE
+  FWDRIGHT =3,
+  BCKLEFT =4,
+  BCKRIGHT =5,
+  SPINRIGHT =6,
+  SPINLEFT =7,
+  STOPCAR = 8,
+  MAXIDSIZE
   } _ID;
 
   _ID msgid = STOPCAR; //msgid 8 (stop)
 
   funcptr flookup[MAXIDSIZE] = { //called with callme in main while loop
-		  move_forward, //msgid = 0
-		  move_backward,
-		  move_forward_soft_left,
-		  move_forward_soft_right,
-		  move_backward_soft_left,
-		  move_backward_soft_right,
-		  move_spin_right,
-		  move_spin_left,
-		  stop //msgid = 8
+      move_forward, //msgid = 0
+      move_backward,
+      move_forward_soft_left,
+      move_forward_soft_right,
+      move_backward_soft_left,
+      move_backward_soft_right,
+      move_spin_right,
+      move_spin_left,
+      stop //msgid = 8
   };
 
   funcptr callme = stop; //first command to be called on startup is stop
@@ -235,46 +235,53 @@ int main(void)
 
   uint32_t t_prev = 0;
   while (1)
-	{
+  {
 
-	  //check serial buffer for 3 incoming bytes
-	  while(usart1_available() > 3){ //if waiting for 5 bytes, might put avail() > 5 etc.
-		 //char mybyte =  (char)usart1_read(); //get/store next byte from buffer in a variable to do something with
-		  //printf("%c",usart1_readc()); //print as a char the next byte available to read from buffer
+    //check serial buffer for 3 incoming bytes
+    while(usart1_available() > 2){ //if waiting for 5 bytes, might put avail() > 5 etc.
+     //char mybyte =  (char)usart1_read(); //get/store next byte from buffer in a variable to do something with
+      //printf("%c",usart1_readc()); //print as a char the next byte available to read from buffer
 
-		  //parse incoming message
-		  char start = usart1_readc();
-		  char last = 0;
-		  uint8_t rxid;
+      //parse incoming message
+      printf("received\n");
+      char start = usart1_readc();
+      char last = 0;
+      uint8_t rxid;
+      printf("received %c", start);
 
-		  if (start == '$') //if start byte (should be $)
-		  {
-			  rxid = usart1_read(); //next byte is msgID byte
-			  last = usart1_readc(); //get last byte (should be' *')
-		  }
-		  else
-		  {
-			  break; //bad message (discard incoming chars till it finds a $ symbol or buffer is empty)
-		  }
 
-	     if (last == '*') //its a good message
-		  {
-		  callme = flookup[rxid]; //assign function/motor command to be called by callme using rxid as index
-		  }
-	  }
+      if (start == '$') //if start byte (should be $)
+      {
+        printf("made it\n");
+        rxid = usart1_read(); //next byte is msgID byte
+        //rxid -= 48; //convert from ascii to regular number
+        last = usart1_readc(); //get last byte (should be' *')
+      }
+      else
+      {
+        break; //bad message (discard incoming chars till it finds a $ symbol or buffer is empty)
+      }
 
-	//robot stuff
+       if (last == '*') //its a good message
+      {
+        printf("made itcallme, rxid: %d\n", rxid);
 
-	callme(); //runs received wireless motor commands
+      callme = flookup[rxid]; //assign function/motor command to be called by callme using rxid as index
+      }
+    }
 
-	//below may not be nessisary anymore
-   set_left_motor_direc(FORWARD,0);
-   set_right_motor_direc(BACKWARD,0);
-   move_forward();
+  //robot stuff
+
+  callme(); //runs received wireless motor commands
+
+  //below may not be nessisary anymore
+  //  set_left_motor_direc(FORWARD,0);
+  //  set_right_motor_direc(BACKWARD,0);
+  //  move_forward();
   //  delay_ms(3000);
   //  // set_right_motor_direc(FORWARD,0);
   //  // set_left_motor_direc(BACKWARD,0);
-   move_backward();
+  //  move_backward();
   //  delay_ms(3000);
   //  set_right_motor_direc(STOP,0);
   //  set_left_motor_direc(STOP,0);
@@ -285,14 +292,14 @@ int main(void)
 
    //timed task stuff
      if ((msTicks - t_prev) > 1000)
-		{
+    {
 
-    	 //send outgoing messages to java here
-    	 //somesendfunction(message)
+       //send outgoing messages to java here
+       //somesendfunction(message)
 
-    	 printf("rx: %d\n", usart1_available()); //keep in for now. makes sure serial data coming through while loop is not optimized out.
-			t_prev = msTicks;
-		}
+       printf("rx: %d\n", usart1_available()); //keep in for now. makes sure serial data coming through while loop is not optimized out.
+      t_prev = msTicks;
+    }
 
   }
 }
