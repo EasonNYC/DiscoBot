@@ -55,8 +55,8 @@ public class SerialPortUtil {
 			} else {
 				System.out.println("write not successful");
 			}
+
 		} catch (SerialPortException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -65,8 +65,8 @@ public class SerialPortUtil {
 		try {
 			port.closePort();
 			System.out.println("closed port");
+
 		} catch (SerialPortException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -77,8 +77,8 @@ public class SerialPortUtil {
 				port.writeByte(START_BYTE);
 				port.writeByte(msg);
 				port.writeByte(STOP_BYTE);
+
 			} catch (SerialPortException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
