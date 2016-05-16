@@ -296,6 +296,8 @@ int main(void)
 
     	 //send outgoing messages to java here
     	 //somesendfunction(message)
+       float t = read_temperature_sensor();
+       printf("temperature %f\n", t);
 
     	 printf("rx: %d\n", usart1_available()); //keep in for now. makes sure serial data coming through while loop is not optimized out.
 			t_prev = msTicks;

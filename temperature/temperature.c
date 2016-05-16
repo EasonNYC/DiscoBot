@@ -25,7 +25,7 @@ void init_temperature_sensor(){
 	ADC_Init(ADC1, &ADC_InitStruct);
 
 	// ADC Channel 1 Configuration
-	ADC_RegularChannelConfig(ADC1, ADC_Channel_TempSensor, 1, ADC_SampleTime_144Cycles);
+	ADC_RegularChannelConfig(ADC1, ADC_Channel_11, 1, ADC_SampleTime_144Cycles);
 
 	// Enable Temperature Sensor
 	ADC_TempSensorVrefintCmd(ENABLE);
@@ -43,15 +43,15 @@ float read_temperature_sensor(){
 
 	while (ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == RESET); //Wait for ADC conversion to finish
 	temp = (float)ADC_GetConversionValue(ADC1); //Get one ADC reading -- as a number from 0 to 4095 (12 bits)
-
-	// Convert ADC reading to voltage
-	temp /= 4095.0f; 
-	temp *= 3.3f;	
-
-	temp -= 0.760f; 
-	temp /= .0025f; 
-
-	temp += 25.0f; 
+	//
+	// // Convert ADC reading to voltage
+	// temp /= 4095.0f;
+	// temp *= 3.3f;
+	//
+	// temp -= 0.760f;
+	// temp /= .0025f;
+	//
+	// temp += 25.0f;
 
 	return temp;
 }
