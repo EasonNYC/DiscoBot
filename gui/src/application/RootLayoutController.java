@@ -19,7 +19,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-
 /**
  * This class is the controller class of the DiscoBot GUI specified by
  * applicaton.view.RootLayout.fxml. Communicates at 9600 baud.
@@ -80,16 +79,10 @@ public class RootLayoutController extends AnchorPane implements Initializable {
 		portUtil.openPort();
 	}
 
-	public void testSerialPortWrite() {
-		// change this for hardcoded testing/ connection
-		portUtil.writeByteToPort(FORWARD);
-	}
-
 	public void closePort() {
 		portUtil.closePort();
 	}
 
-	
 	private void addDirectionalBooleanListeners() {
 		upPressed.addListener(new ChangeListener<Boolean>() {
 			@Override
@@ -103,25 +96,34 @@ public class RootLayoutController extends AnchorPane implements Initializable {
 					upBtn.setGraphic(ImageLoader.getUpInv());
 
 					if (!down && !left && !right) {
-						System.out.println("0: forward-up");
+						portUtil.writeByteToPort(FORWARD);
+						System.out.println("0: forward");
 					} else {
 						if (down)
 							upPressed.set(false);
-						else if (left)
-							System.out.println("2: forward left-up");
-						else if (right)
-							System.out.println("3: forward right-up");
+						else if (left) {
+							portUtil.writeByteToPort(FORWARD_LEFT);
+							System.out.println("2: forward left");
+						} else if (right) {
+							portUtil.writeByteToPort(FORWARD_RIGHT);
+							System.out.println("3: forward right");
+						}
 					}
 				} else {
 					upBtn.setGraphic(ImageLoader.getUp());
 
 					if (!down && !left && !right) {
-						System.out.println("8: stop-up");
+						portUtil.writeByteToPort(STOP);
+						System.out.println("8: stop");
 					} else if (!down) {
-						if (left)
-							System.out.println("7: spin left-up");
-						else if (right)
+						if (left) {
+							portUtil.writeByteToPort(SPIN_LEFT);
+							System.out.println("7: spin left");
+						}
+						else if (right) {
+							portUtil.writeByteToPort(SPIN_RIGHT);
 							System.out.println("6: spin right-up");
+						}
 					}
 				}
 			}
@@ -138,27 +140,39 @@ public class RootLayoutController extends AnchorPane implements Initializable {
 				if (newValue) {
 					downBtn.setGraphic(ImageLoader.getDownInv());
 
-					if (!up && !left && !right)
-						System.out.println("1: backward-d");
+					if (!up && !left && !right) {
+						portUtil.writeByteToPort(BACKWARD);
+						System.out.println("1: backward");
+					}
 					else {
 						if (up)
 							downPressed.set(false);
-						else if (left)
-							System.out.println("4: backward left-d");
-						else if (right)
-							System.out.println("5: backward right-d");
+						else if (left) {
+							portUtil.writeByteToPort(BACKWARD_LEFT);
+							System.out.println("4: backward left");
+						}
+						else if (right) {
+							portUtil.writeByteToPort(BACKWARD_RIGHT);
+							System.out.println("5: backward right");
+						}
 					}
 
 				} else {
 					downBtn.setGraphic(ImageLoader.getDown());
 
-					if (!up && !left && !right)
-						System.out.println("8: stop-d");
+					if (!up && !left && !right) {
+						portUtil.writeByteToPort(STOP);
+						System.out.println("8: stop");
+					}
 					else if (!up) {
-						if (left)
-							System.out.println("7: spin left-d");
-						else if (right)
-							System.out.println("6: spin right-d");
+						if (left) {
+							portUtil.writeByteToPort(SPIN_LEFT);
+							System.out.println("7: spin left");
+						}
+						else if (right) {
+							portUtil.writeByteToPort(SPIN_RIGHT);
+							System.out.println("6: spin right");
+						}
 					}
 				}
 			}
@@ -175,27 +189,39 @@ public class RootLayoutController extends AnchorPane implements Initializable {
 				if (newValue) {
 					leftBtn.setGraphic(ImageLoader.getLeftInv());
 
-					if (!up && !down && !right)
-						System.out.println("7: spin left-l");
+					if (!up && !down && !right) {
+						portUtil.writeByteToPort(SPIN_LEFT);
+						System.out.println("7: spin left");
+					}
 					else {
 						if (right)
 							leftPressed.set(false);
-						else if (up)
-							System.out.println("2: forward left-l");
-						else if (down)
-							System.out.println("4: backward left-l");
+						else if (up) {
+							portUtil.writeByteToPort(FORWARD_LEFT);
+							System.out.println("2: forward left");
+						}
+						else if (down) {
+							portUtil.writeByteToPort(BACKWARD_LEFT);
+							System.out.println("4: backward left");
+						}
 					}
 
 				} else {
 					leftBtn.setGraphic(ImageLoader.getLeft());
 
-					if (!up && !down && !right)
+					if (!up && !down && !right) {
+						portUtil.writeByteToPort(STOP);
 						System.out.println("8: stop");
+					}
 					else if (!right) {
-						if (up)
-							System.out.println("0: forward-l");
-						else if (down)
-							System.out.println("1: backward-l");
+						if (up) {
+							portUtil.writeByteToPort(FORWARD);
+							System.out.println("0: forward");
+						}
+						else if (down) {
+							portUtil.writeByteToPort(BACKWARD);
+							System.out.println("1: backward");
+						}
 					}
 				}
 			}
@@ -212,27 +238,39 @@ public class RootLayoutController extends AnchorPane implements Initializable {
 				if (newValue) {
 					rightBtn.setGraphic(ImageLoader.getRightInv());
 
-					if (!up && !down && !left)
-						System.out.println("6: spin right-r");
+					if (!up && !down && !left) {
+						portUtil.writeByteToPort(SPIN_RIGHT);
+						System.out.println("6: spin right");
+					}
 					else {
 						if (left)
 							rightPressed.set(false);
-						else if (up)
-							System.out.println("3: forward right-r");
-						else if (down)
-							System.out.println("5: backward right-r");
+						else if (up) {
+							portUtil.writeByteToPort(FORWARD_RIGHT);
+							System.out.println("3: forward right");
+						}
+						else if (down) {
+							portUtil.writeByteToPort(BACKWARD_RIGHT);
+							System.out.println("5: backward right");
+						}
 					}
 
 				} else {
 					rightBtn.setGraphic(ImageLoader.getRight());
 
-					if (!up && !down && !left)
-						System.out.println("8: stop-r");
+					if (!up && !down && !left) {
+						portUtil.writeByteToPort(STOP);
+						System.out.println("8: stop");
+					}
 					else if (!left) {
-						if (up)
-							System.out.println("0: forward-r");
-						else if (down)
-							System.out.println("1: backward-r");
+						if (up) {
+							portUtil.writeByteToPort(FORWARD);
+							System.out.println("0: forward");
+						}
+						else if (down) {
+							portUtil.writeByteToPort(BACKWARD);
+							System.out.println("1: backward");
+						}
 					}
 				}
 			}
@@ -354,7 +392,7 @@ public class RootLayoutController extends AnchorPane implements Initializable {
 		return rightPressed.get();
 	}
 
-	private final byte FORWARD = 0, BACKWARD = 1, FORWARD_LEFT = 2, FORWARD_RIGHT = 3, BACK_LEFT = 4, BACK_RIGHT = 5,
+	private final byte FORWARD = 0, BACKWARD = 1, FORWARD_LEFT = 2, FORWARD_RIGHT = 3, BACKWARD_LEFT = 4, BACKWARD_RIGHT = 5,
 			SPIN_RIGHT = 6, SPIN_LEFT = 7, STOP = 8;
 
 }
