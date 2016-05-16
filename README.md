@@ -29,6 +29,14 @@ For robot Xbee:
 | PB7          | TX              |
 | PB6          | RX              |
 
+For the  motor driver:
+
+| STM32F4 PIN  | MOTOR PIN  |
+| ------------ |:----------------:|
+| PA1          | LEFT MOTOR            |
+| PA2         | LEFT MOTOR              |
+| PA3          | RIGHT MOTOR              |
+| PA4          | RIGHT MOTOR              |
 
 ###Software
 -The ARM Standard Peripheral Library must be included to properly use this driver. Specifically make sure you have included these S.P.L. files in your project's working directory:  
