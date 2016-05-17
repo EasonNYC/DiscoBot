@@ -149,6 +149,3 @@ char usart1_readc(void){
 uint8_t usart1_available(void) {
 	return buf_available(&msg);
 }
-
-
-

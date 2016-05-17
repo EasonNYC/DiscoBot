@@ -217,7 +217,7 @@ int main(void)
 {
   // initialize
   SystemInit();
-  initialise_monitor_handles();
+  // initialise_monitor_handles();
   init_systick();
   init_LED_pins();
   init_button();
@@ -238,28 +238,43 @@ int main(void)
   {
 
     //check serial buffer for 3 incoming bytes
-    while(usart1_available() > 2){ //if waiting for 5 bytes, might put avail() > 5 etc.
+    while(usart1_available() > 0){ //if waiting for 5 bytes, might put avail() > 5 etc.
      //char mybyte =  (char)usart1_read(); //get/store next byte from buffer in a variable to do something with
       //printf("%c",usart1_readc()); //print as a char the next byte available to read from buffer
 
       //parse incoming message
-      printf("received\n");
-      char start = usart1_readc();
+      // printf("received\n");
+      char read = usart1_readc();
+
+      if (read >= 0 && read <= 8) {
+        callme = flookup[read]; //assign function/motor command to be called by callme using rxid as index
+        callme();
+
+        // printf("received %c", read);
+      }
+
+      /*
       char last = 0;
       uint8_t rxid;
-      printf("received %c", start);
+      */
+      //printf("received %c", read);
 
-
-      if (start == '$') //if start byte (should be $)
+      /*
+      if (received == '*') //if start byte (should be $)
       {
-        printf("made it\n");
+        printf("start correct\n");
         rxid = usart1_read(); //next byte is msgID byte
         //rxid -= 48; //convert from ascii to regular number
         last = usart1_readc(); //get last byte (should be' *')
+        printf("rxid: %d last: %d\n", rxid,last);
       }
       else
       {
+        printf("b start: %d\n", start);
+        usart1_read();
+
         break; //bad message (discard incoming chars till it finds a $ symbol or buffer is empty)
+
       }
 
        if (last == '*') //its a good message
@@ -267,12 +282,17 @@ int main(void)
         printf("made itcallme, rxid: %d\n", rxid);
 
       callme = flookup[rxid]; //assign function/motor command to be called by callme using rxid as index
+      while(usart1_available())
+      {
+      usart1_read();//throw away any leftover
       }
+      }
+      */
     }
 
   //robot stuff
 
-  callme(); //runs received wireless motor commands
+  //callme(); //runs received wireless motor commands
 
   //below may not be nessisary anymore
   //  set_left_motor_direc(FORWARD,0);
@@ -297,7 +317,16 @@ int main(void)
        //send outgoing messages to java here
        //somesendfunction(message)
 
-       printf("rx: %d\n", usart1_available()); //keep in for now. makes sure serial data coming through while loop is not optimized out.
+      //  printf("rx: %d\n", usart1_available()); //keep in for now. makes sure serial data coming through while loop is not optimized out.
+
+       /*
+       if (usart1_available() == 1)
+       {
+         uint8_t thechar = usart1_peek_byte();
+         printf("buf: %d", thechar );
+
+       }
+       */
       t_prev = msTicks;
     }
 

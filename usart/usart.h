@@ -15,4 +15,5 @@ void usart1_send(volatile char*);
 uint8_t usart1_read(void);
 char usart1_readc(void);
 uint8_t usart1_available(void);
+uint8_t usart1_peek_byte(void);
 #endif /* USART_USART_H_ */

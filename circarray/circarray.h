@@ -40,6 +40,8 @@ uint8_t buf_available(CircArr_InitTypeDef* arr);
 uint8_t buf_getbyte(CircArr_InitTypeDef* arr);
 uint8_t buf_putbyte(CircArr_InitTypeDef* arr, uint8_t c);
 void buf_test(CircArr_InitTypeDef* arr);
+uint8_t buf_peek_byte(CircArr_InitTypeDef* arr);
+
 
 #endif /* CIRCARRAY_CIRCARRAY_H_ */
 
